@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: dev
+    include:
+      - mybatis
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+
+
+
+#通用mapper配置
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+    - com.haihun.comm.base.BaseMapper
+  identity: MYSQL
+  not-empty: false
+
+#pagehelper
+pagehelper:
+  auto-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+# 日志配置
+logging:
+  level:
+    com.haihun: debug
+#  pattern:
+  file: log/sdk.log
+
+config:
+  quartz-file-name: quartz.properties
+
+iconpath:
+  repositoryPath: file
+  imageBaseUrl: http://sdk.haihungame.com/images
+
+
+

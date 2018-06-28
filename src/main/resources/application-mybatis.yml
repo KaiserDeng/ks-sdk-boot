@@ -1,0 +1,14 @@
+mybatis:
+  configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+      cacheEnabled: false
+      lazy-loading-enabled: true
+      aggressive-lazy-loading: true
+      multiple-result-sets-enabled: true
+      use-column-label: true
+      use-generated-keys: true
+      auto-mapping-behavior: partial
+      default-executor-type: simple
+      map-underscore-to-camel-case: true
+      local-cache-scope: session
+      jdbc-type-for-null: null

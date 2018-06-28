@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<form class="layui-form layui-form-pane" method="post" action="/order/createWapOrder">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">appId</label>
+        <div class="layui-input-inline">
+            <input type="text" name="appId" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="hh80674e498b7b415f">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">title</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="测试充值">
+        </div>
+    </div>
+    <input type="hidden" name="paymentType" th:value="${paymentType}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">totalFee</label>
+        <div class="layui-input-inline">
+            <input type="text" name="totalFee" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="100">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">userName</label>
+        <div class="layui-input-inline">
+            <input type="text" name="userName" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="15501302275">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">payChannel</label>
+        <div class="layui-input-inline">
+            <input type="text" name="payChannel" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="2">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">extra</label>
+        <div class="layui-input-inline">
+            <input type="text" name="extra" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input" value="xxx">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script src="../../layuiadmin/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.$;
+
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        //监听提交
+     /*   form.on('submit(demo1)', function (data) {
+
+        });*/
+
+
+    });
+</script>
+
+</body>
+</html>

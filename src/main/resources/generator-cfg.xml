@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--因为项目中引入了连接驱动所以可以缺省-->
+    <!--<classPathEntry location="D:/maven_jar4/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar"/>-->
+
+    <context id="context1">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 这里的type里写的是你的实现类的类全路径 -->
+        <commentGenerator type="org.mybatis.generator.internal.DefaultCommentGenerator"/>
+
+
+        <!-- 数据库连接 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.0.200:3306/multi_game_manager" userId="root"
+                        password="zjgame200"/>
+
+        <!-- 实体类生成位置 -->
+        <javaModelGenerator targetPackage="com.haihun.sdk.pojo"
+                            targetProject="src/test/java"/>
+        <!-- xml生成位置 -->
+        <sqlMapGenerator targetPackage="mybatis.mapper"
+                         targetProject="src/test/resources"></sqlMapGenerator>
+
+        <!-- Mapper生成位置 -->
+        <javaClientGenerator targetPackage="com.haihun.sdk.mapper"
+                             targetProject="src/test/java" type="XMLMAPPER"/>
+
+
+        <table schema="mybatis" tableName="tb_sys_permission" domainObjectName="Permission"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <!--是否有主键，如果有的话请放开这里，并设置字段-->
+            <generatedKey column="id" sqlStatement="MySql" type="post" identity="true"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

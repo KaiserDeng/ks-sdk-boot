@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.BankMapper">
+
+    <resultMap id="baseMap" type="com.haihun.sdk.pojo.Bank">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="pay_type" property="payType" jdbcType="VARCHAR"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="app_public_key" property="appPublicKey" jdbcType="VARCHAR"/>
+        <result column="app_private_key" property="appPrivateKey" jdbcType="VARCHAR"/>
+        <result column="appSecret" property="appsecret" jdbcType="VARCHAR"/>
+        <result column="api_key" property="apiKey" jdbcType="VARCHAR"/>
+        <result column="mch_id" property="mchId" jdbcType="VARCHAR"/>
+        <result column="alipay_public_key" property="alipayPublicKey" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseSql">
+    ID, pay_type, app_id, app_public_key, app_private_key, appSecret, api_key, mch_id,
+    alipay_public_key
+  </sql>
+
+    <insert id="addGameAndBank">
+        INSERT INTO tb_game_bank ( `game_id`, `bank_id`)  VALUES ( #{gameId }, #{id });
+
+    </insert>
+    <select id="findBankByGameIdAndPayType" resultMap="baseMap">
+              SELECT b.*  FROM tb_game_bank gb
+                           LEFT JOIN tb_banks b ON gb.bank_Id = b.id
+                           WHERE gb.game_id =#{gameId} and b.pay_type = #{payType}
+    </select>
+
+
+</mapper>

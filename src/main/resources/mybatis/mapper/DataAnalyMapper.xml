@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.DataAnalyMapper">
+
+
+
+
+
+    <select id="analyAll" resultType="java.util.Map">
+        select b.*, ifnull(ROUND(b.allUser/b.paymentCount,2),"0") payRate, ifnull(ROUND(b.totalFee/b.paymentCount,2),"0") ARPPU
+        , ifnull(ROUND(b.totalFee/allUser,2),"0") APRU, ifnull(ROUND(b.newPay/b.newDevice,2),"0") newARPU, ifnull(ROUND(b.newPaymentCount/b.newDevice,2),"0") newPayRate
+        , ifnull(ROUND(b.newDevice/allUser,2),"0") newPerc, ifnull(ROUND(b.newPay/b.paymentCount,2),"0") newPayPerc
+        from (SELECT
+        date(#{beginTime})       curdate,
+        (SELECT count(1) FROM tb_user  where date(create_time) &lt;=#{beginTime})  allUser ,
+        count(DISTINCT tec.duid)    newDevice,
+        count(DISTINCT tga.ec_id) DAU ,
+        (SELECT count(DISTINCT user_name) FROM tb_order where status = 2 and date(create_time) &lt;= #{beginTime}) paymentCount,
+        ifnull((SELECT sum(tbo.total_fee)  from tb_order tbo where tbo.status ='2' and  date(create_time) &lt;= #{beginTime}),0) totalFee ,
+        count(DISTINCT o.user_name) newPaymentCount,
+        ifnull(sum(case o.status when "2" then o.total_fee else 0 end ),0) newPay
+        ,(SELECT count(1) FROM (SELECT min(trigger_time) minTime FROM tb_user_behavior tub LEFT JOIN tb_user u ON tub.user_name = u.user_name WHERE behavior_type = '0' and app_id= #{appId} AND channel_id = #{chId} AND DATEDIFF(tub.trigger_time,u.create_time) = 1 GROUP BY tub.user_name) t) timeToLeave
+        ,(SELECT count(1) FROM (SELECT min(trigger_time) minTime FROM tb_user_behavior tub LEFT JOIN tb_user u ON tub.user_name = u.user_name WHERE behavior_type = '0' and app_id= #{appId} AND channel_id = #{chId} AND DATEDIFF(tub.trigger_time,u.create_time) = 3 GROUP BY tub.user_name) t) '3rd'
+        ,(SELECT count(1) FROM (SELECT min(trigger_time) minTime FROM tb_user_behavior tub LEFT JOIN tb_user u ON tub.user_name = u.user_name WHERE behavior_type = '0' and app_id= #{appId} AND channel_id = #{chId} AND DATEDIFF(tub.trigger_time,u.create_time) = 7 GROUP BY tub.user_name) t) '7th'
+        ,(SELECT count(1) FROM (SELECT min(trigger_time) minTime FROM tb_user_behavior tub LEFT JOIN tb_user u ON tub.user_name = u.user_name WHERE behavior_type = '0' and app_id= #{appId} AND channel_id = #{chId} AND DATEDIFF(tub.trigger_time,u.create_time) = 15 GROUP BY tub.user_name) t) '15th'
+        ,(SELECT count(1) FROM (SELECT min(trigger_time) minTime FROM tb_user_behavior tub LEFT JOIN tb_user u ON tub.user_name = u.user_name WHERE behavior_type = '0' and app_id= #{appId} AND channel_id = #{chId} AND DATEDIFF(tub.trigger_time,u.create_time) = 30 GROUP BY tub.user_name) t) 'aMonth'
+
+        FROM tb_equipment_channel tec
+        LEFT JOIN tb_equipment te ON tec.duid = te.duid
+        LEFT JOIN tb_user u ON te.id = u.equipment_id
+        left JOIN tb_order o on u.user_name = o.user_name
+        left join tb_game_active tga on tec.ec_id = tga.ec_id
+        LEFT JOIN tb_user_behavior tub2 on u.user_name = tub2.user_name
+        WHERE DATE(tec.create_time)  = #{beginTime} and o.status = '2' and tec.app_id = #{appId} and tec.channel_id = #{appId}) b
+    </select>
+</mapper>

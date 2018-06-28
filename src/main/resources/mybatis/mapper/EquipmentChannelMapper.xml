@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.EquipmentChannelMapper">
+
+    <resultMap id="baseResultMap" type="com.haihun.sdk.pojo.EquipmentChannel">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="duid" property="duid" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="channel_id" property="channelId" jdbcType="INTEGER"/>
+        <result column="ec_id" property="ecId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseSql">
+      id id, duid duid, create_time createTime, app_id appId, channel_id channelId,ec_id ecId
+    </sql>
+
+
+    <insert id="addActiveStatus">
+      insert into tb_game_active(active_time,ec_id) VALUES (curdate(),#{ecId})
+    </insert>
+
+    <select id="findByEcId" resultType="com.haihun.sdk.pojo.EquipmentChannel">
+        select
+        <include refid="baseSql"/>
+        from tb_equipment_channel where ec_id = #{duid } ;
+    </select>
+
+    <select id="findByDuidAndAppIdChannelId" resultType="com.haihun.sdk.pojo.EquipmentChannel">
+        select
+        <include refid="baseSql"/>
+        from tb_equipment_channel where duid = #{duid } and
+        channel_id = #{channel } and app_id = #{appKey };
+    </select>
+
+
+    <select id="findActive" resultType="java.lang.Integer">
+      select count(1) from tb_game_active where active_time = curdate() and ec_id = #{ecId};
+    </select>
+
+</mapper>

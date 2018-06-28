@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.EquipmentMapper">
+
+    <resultMap id="baseResultMap" type="com.haihun.sdk.pojo.Equipment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="app_key" property="appKey" jdbcType="VARCHAR"/>
+        <result column="app_name" property="appName" jdbcType="VARCHAR"/>
+        <result column="app_package" property="appPackage" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="factory" property="factory" jdbcType="VARCHAR"/>
+        <result column="carrier" property="carrier" jdbcType="VARCHAR"/>
+        <result column="screen_size" property="screenSize" jdbcType="VARCHAR"/>
+        <result column="sysver" property="sysver" jdbcType="VARCHAR"/>
+        <result column="plat" property="plat" jdbcType="VARCHAR"/>
+        <result column="duid" property="duid" jdbcType="VARCHAR"/>
+        <result column="imei" property="imei" jdbcType="VARCHAR"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="android_id" property="androidId" jdbcType="VARCHAR"/>
+        <result column="mac" property="mac" jdbcType="VARCHAR"/>
+        <result column="extra" property="extra" jdbcType="VARCHAR"/>
+        <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="promoter" property="promoter" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseSql">
+    id, app_key, app_name, app_package, model, factory, carrier, screen_size, sysver, 
+    plat, duid, imei, serial_no, android_id, mac, extra,create_time,channel,promoter
+  </sql>
+
+    <select id="findByDuid" resultMap="baseResultMap">
+        select <include refid="baseSql"/> from tb_equipment where duid = #{duid };
+    </select>
+
+</mapper>

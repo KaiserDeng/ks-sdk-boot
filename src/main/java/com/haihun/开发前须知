@@ -1,0 +1,39 @@
+1. 该项目基于Spring Boot开发。
+
+数据加密
+    说明：该系统对所有敏感数据进行了自动加密、解密。
+    为什么Content-Type要使用application/json？
+        1. 因为http协议的POST请求默认使用的是application/x-www-form-urlencoded。
+        2. 它会将一切数据自动的以key=val的自动填充到body表单中。request.getInputStream读取不到任何数据。
+            2.1 而流被填充到表单后会出现 k,v都会是字节乱码，数据将无法进行逆向解密。
+            2.2 application/json则是以流的方式传输的。它不存在这个问题。
+
+加密规则：
+    前置：生成一个aesKey,和一对RSA 公/私钥。RSA的加密原理:使用公钥加密的数据只有私钥可以解，反之亦然。
+
+    1. 将需要加密的数据用AES128对称加密算法对数据进行加密后得到数据body。再使用RSA非对称加密算法对aesKey进行加密。
+    2. 使用DataOutputStream将aesKey的（字节长度）写入到ByteArrayOutputStream,再将aesKey的（所有字节）写入。
+    3. 同上，先将body的长度写入，再将body的所有字节写入。
+    4. 使用HMAC_MD5算法与appSecret(可自定义)对ByteArrayOutputStream中的所有字节进行加密。
+    5. 再使用16进制加密对HMAC_MD5加密后的数据进行加密，此时得到 sign。
+        5.1 (16进制加密算法请参考commons-codec这个jar里面集成很多的加密、解密算法)
+    6. 设置请求头Content-Type为 application/json，请求头加入 ak=appId,sign=sign。
+    7. 将数据写入到服务器端
+
+
+请求数据自动解密类：com.haihun.filter.ParameterFilter
+    1. Client端加密数据,请将请求头设置为application/json以流的方式将数据write到Server端。
+        1.1 请求头必须加入 sign 和 ak .否则将不进行自动解密。
+    2. 在过滤器中读取到客户端写入的流，进行逆向解密。并对数据进行做sign操作。
+    3. 将传入的sign与对应解密后的sign进行对比。如果无法对应，则数据被篡改。
+    4. 所有请求数据在解密后的会自动的生成一个aesKey="xxx"的参数。
+    5. 如果响应消息需要加密，aesKey的生命周期等于整个请求的生命周期。
+
+响应数据自动加密类：com.haihun.interceptor.ResInterceptor
+    1. 如果响应需要进行加密请使用@ResponseEncrypt注解标识，这个注解默认声明了这个处理器响应需要进行加密。
+    2. 响应加密规则：
+        2.1  Client端生成一个aesKey对请求进行加密，Server端自动解密并保存此次请求的aesKey到request域。
+        2.2  当处理器声明了@ResponseEncrypt注解，在请求完成返回数据的时候，响应将会捕获拦截。并对返回数据使用aesKey进行加密。
+    3. Client端收到加密数据后，使用Client存储的aesKey对响应数据进行逆向解密，得到原文数据报。
+
+测试工具类#方法：HttpUtils.encryptPost(String url, String jsonParams, String appId, String appSecret, boolean isDecrypt)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haihun.sdk.mapper.UserBehaviorMapper">
+  <resultMap id="baseResultMap" type="com.haihun.sdk.pojo.UserBehavior">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="behavior_type" jdbcType="VARCHAR" property="behaviorType" />
+    <result column="trigger_time" jdbcType="TIMESTAMP" property="triggerTime" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
+  </resultMap>
+
+</mapper>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh_CN" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all"></head>
+<body>
+
+<input type="hidden" id="hi" th:value="${form}">
+    <script src="../../layuiadmin/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+         var $ = layui.jquery;
+        $("body").append($("#hi").val())
+    });
+</script>
+
+</body>
+</html>

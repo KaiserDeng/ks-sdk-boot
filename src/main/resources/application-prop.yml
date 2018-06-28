@@ -1,0 +1,40 @@
+
+#######################################
+##########  正式环境配置文件 ##########
+#######################################
+
+
+######Redis集群配置######
+#连接最大连接数，默认为8
+custom:
+  redis:
+    configuration:
+      maxTotal: 20
+      #最大空闲连接数
+      maxIdle: 1
+      #最大的等待时间(毫秒)
+      maxWait: 6000
+      #在获取连接的时候检查有效性, 默认false
+      testOnBorrow: true
+      #连接还pool时，是否提前进行validate操作
+      testOnReturn: true
+      #读取超时(毫秒)
+      timeout: 3000
+    nodes:
+      # 因为springboot的哲学是约定大于配置，务请严格按照如下格式配置！
+      #每添加一个节点 node- 后面数字递增
+      node-1:
+        host: 172.17.0.1
+        port: 6379
+        password:
+# 数据源配置
+master:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url:  jdbc:mysql://172.17.0.1:3306/multi_game_manager?useUnicode=true&characterEncoding=UTF8
+    username: root
+    password: haihun2018
+    driverClassName:  com.mysql.jdbc.Driver
+
+repositoryPath: file/
+image_base_url: http://sdk.haihungame.com/images/

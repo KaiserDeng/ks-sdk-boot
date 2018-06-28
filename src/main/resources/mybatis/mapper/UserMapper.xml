@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.haihun.sdk.pojo.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="pwd" property="pwd" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="INTEGER"/>
+        <result column="tel" property="tel" jdbcType="VARCHAR"/>
+        <result column="card_id" property="cardId" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="sina_id" property="sinaId" jdbcType="VARCHAR"/>
+        <result column="wechat_id" property="wechatId" jdbcType="VARCHAR"/>
+        <result column="account_type" property="accountType" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="customer_acc" property="customerAcc" jdbcType="VARCHAR"/>
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+        <result column="is_real_name" property="isRealName" jdbcType="TIMESTAMP"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="equipment_id" property="equipmentId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_name, pwd, nick_name, mobile, tel, card_id, address, gender, qq, email,
+        account_type, create_time, customer_acc, birthday,wechat_id,sina_id,remark,is_real_name,real_name,equipment_id
+    </sql>
+
+
+    <update id="updateMobile">
+      update tb_user u set u.mobile = #{mobile} where u.id = #{id }
+    </update>
+
+
+    <select id="findByMobile" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user u where u.mobile = #{mobile };
+    </select>
+
+    <select id="findByUserName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user u where u.user_name = #{userName};
+    </select>
+
+    <select id="findUserByWeChatIdorSinaId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from tb_user where 1 = 1
+        <if test="sinaId != null">
+            and qq_id = #{sinaId }
+        </if>
+        <if test="wechatId != null">
+            and wechat_id = #{wechatId }
+        </if>
+    </select>
+
+    <select id="findUserByUserNameAndMobile" resultType="com.haihun.sdk.pojo.User">
+        SELECT <include refid="Base_Column_List"/> from tb_user u where u.user_name = #{userName} and u.mobile = #{mobile }
+    </select>
+
+    <select id="findUserByUserNameOrMobile" resultType="com.haihun.sdk.pojo.User">
+        SELECT <include refid="Base_Column_List"/> from tb_user u where u.user_name = #{userName} or u.mobile = #{userName }
+    </select>
+
+</mapper>

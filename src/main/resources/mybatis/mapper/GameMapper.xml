@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haihun.sdk.mapper.GameMapper">
+
+    <resultMap id="baseMap" type="com.haihun.sdk.pojo.Game">
+        <id column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="game_name" property="gameName" jdbcType="VARCHAR"/>
+        <result column="appSecret" property="appSecret" jdbcType="VARCHAR"/>
+        <result column="pay_callback_url" property="payCallBackUrl" jdbcType="VARCHAR"/>
+        <result column="game_icon" property="gameIcon" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="baseColumn">
+        app_id, game_name, appSecret,pay_callback_url,game_icon
+    </sql>
+
+
+    <insert id="bindChannel">
+        INSERT into tb_game_channel(game_id,channel_id) values(#{appId },#{chId })
+    </insert>
+
+
+    <select id="findGameByPage" resultMap="baseMap">
+        SELECT
+        <include refid="baseColumn"/>
+        from tb_game limit #{page },#{rows }
+    </select>
+
+
+    <select id="queryGameByName" resultMap="baseMap">
+        select
+        <include refid="baseColumn"/>
+        from tb_game where game_name LIKE concat("%",#{gameName},"%")
+    </select>
+
+
+    <select id="findAllIds" resultType="java.lang.String">
+      select app_id appId from tb_game;
+    </select>
+
+
+    <select id="findChInfoByAppId" resultType="java.util.Map">
+        select tc.ch_name name,tgc.channel_id val from tb_game_channel  tgc left join tb_channel tc on  tgc.channel_id = tc.id where game_id = #{appId };
+    </select>
+
+
+</mapper>
